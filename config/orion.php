@@ -53,7 +53,7 @@ return [
     'use_validated' => false,
 
     'route_discovery' => [
-        'enabled' => true,
+        'enabled' => false,
         'paths' => [
             app_path('Http/Controllers/Api'),
         ],
