@@ -13,7 +13,7 @@ class StandardIndexBeforeFilterAppliedOperationsTest extends TestCase
     public function filters_rewritten_in_before_filter_applied_take_effect_for_json_requests(): void
     {
         $matchingPost = factory(Post::class)->create(['title' => 'match', 'body' => 'no match'])->fresh();
-        $nonMatchingPost = factory(Post::class)->create(['title' => 'no match', 'body' => 'match'])->fresh();
+        factory(Post::class)->create(['title' => 'no match', 'body' => 'match'])->fresh();
 
         Gate::policy(Post::class, GreenPolicy::class);
 
@@ -34,9 +34,6 @@ class StandardIndexBeforeFilterAppliedOperationsTest extends TestCase
         $response->assertOk();
         $response->assertJsonCount(1, 'data');
         $response->assertJsonPath('data.0.id', $matchingPost->id);
-        $response->assertJsonMissingPath('data.1');
-
-        $this->assertNotEquals($matchingPost->id, $nonMatchingPost->id);
     }
 
     /** @test */
