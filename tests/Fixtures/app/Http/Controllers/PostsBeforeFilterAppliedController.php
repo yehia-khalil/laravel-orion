@@ -2,21 +2,16 @@
 
 namespace Orion\Tests\Fixtures\App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Model;
-use Orion\Http\Controllers\RelationController;
+use Orion\Http\Controllers\Controller;
 use Orion\Http\Requests\Request;
-use Orion\Tests\Fixtures\App\Models\User;
+use Orion\Tests\Fixtures\App\Models\Post;
 
-class UserPostsController extends RelationController
+class PostsBeforeFilterAppliedController extends Controller
 {
-    protected $model = User::class;
-
-    protected $relation = 'posts';
-
-    public function includes(): array
-    {
-        return ['user'];
-    }
+    /**
+     * @var string|null $model
+     */
+    protected $model = Post::class;
 
     public function filterableBy(): array
     {
@@ -28,11 +23,10 @@ class UserPostsController extends RelationController
      * exercise filter rewriting inside buildIndexFetchQuery.
      *
      * @param Request $request
-     * @param Model $parentEntity
      * @param array $filterDescriptor
      * @return array
      */
-    protected function beforeFilterApplied(Request $request, Model $parentEntity, array $filterDescriptor): array
+    protected function beforeFilterApplied(Request $request, array $filterDescriptor): array
     {
         if (($filterDescriptor['field'] ?? null) === 'body') {
             $filterDescriptor['field'] = 'title';
